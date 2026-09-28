@@ -129,18 +129,50 @@ h1, h2 { margin: 0; font-size: 16px; line-height: 1.2; }
   background: transparent;
   color: var(--text);
   text-align: left;
+  cursor: pointer;
 }
 .charger:hover, .charger.selected { background: rgba(72, 148, 95, .1); }
 .dot { display: inline-block; flex: none; width: 10px; height: 10px; margin-top: 4px; border-radius: 50%; }
 .charger-main { min-width: 0; flex: 1; }
-.charger strong, .charger small { display: block; }
-.charger strong { font-size: 14px; }
-.charger small { margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.4; }
-.status { font-size: 11px; font-weight: 700; white-space: nowrap; }
-.status.available { color: #18854a; background: none; }
-.status.occupied { color: #ba7010; background: none; }
-.status.fault { color: #cb3939; background: none; }
-.status.unknown { color: var(--muted); background: none; }
+.charger-title { display: flex; align-items: center; gap: 6px; }
+.charger-name { min-width: 0; padding: 0; border: 0; background: none; color: inherit; text-align: left; font-size: 14px; font-weight: 700; }
+.charger-main small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+.charger-info {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  padding: 0;
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+.charger-tooltip {
+  position: fixed;
+  z-index: 20;
+  width: min(240px, calc(100vw - 24px));
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 8px 24px #0003;
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+.charger-tooltip[hidden] { display: none; }
+.charger-tooltip div + div { margin-top: 4px; }
+.status { display: inline-flex; align-items: center; flex: none; padding: 4px 7px; border-radius: 30px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.status.available { color: #18854a; background: rgba(48, 182, 106, .14); }
+.status.occupied { color: #ba7010; background: rgba(243, 167, 52, .16); }
+.status.fault { color: #cb3939; background: rgba(232, 88, 88, .14); }
+.status.unknown { color: var(--muted); background: rgba(137, 149, 141, .16); }
 .legend {
   display: flex;
   flex-wrap: wrap;

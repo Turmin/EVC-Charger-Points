@@ -22,6 +22,73 @@
   var markers = document.getElementById('markers');
   var refresh = document.getElementById('refresh');
   var updated = document.getElementById('updated');
+  var infoPopup = document.createElement('div');
+  var activeInfo = null;
+  var pinnedInfo = false;
+  infoPopup.id = 'charger-info-popup';
+  infoPopup.className = 'charger-tooltip';
+  infoPopup.setAttribute('role', 'tooltip');
+  infoPopup.hidden = true;
+  document.body.appendChild(infoPopup);
+
+  function hideInfo() {
+    if (activeInfo) {
+      activeInfo.setAttribute('aria-expanded', 'false');
+      activeInfo.removeAttribute('aria-describedby');
+    }
+    activeInfo = null;
+    pinnedInfo = false;
+    infoPopup.hidden = true;
+  }
+
+  function showInfo(button, charger, id) {
+    hideInfo();
+    var evse = charger.evses && charger.evses[0];
+    var stamp = evse && evse.retrievedAt && new Date(evse.retrievedAt);
+    infoPopup.replaceChildren();
+    [
+      'Description: ' + (charger.description || '—') + ' · ' + id,
+      'Updated: ' + (stamp && !isNaN(stamp.getTime()) ? stamp.toLocaleString() : 'Unavailable')
+    ].forEach(function (line) {
+      var item = document.createElement('div');
+      item.textContent = line;
+      infoPopup.appendChild(item);
+    });
+    if (charger.error) {
+      var error = document.createElement('div');
+      error.textContent = 'Refresh error: ' + charger.error;
+      infoPopup.appendChild(error);
+    }
+    infoPopup.hidden = false;
+    activeInfo = button;
+    button.setAttribute('aria-expanded', 'true');
+    button.setAttribute('aria-describedby', infoPopup.id);
+    var rect = button.getBoundingClientRect();
+    var left = Math.max(12, Math.min(rect.left, window.innerWidth - infoPopup.offsetWidth - 12));
+    var top = rect.bottom + 8;
+    if (top + infoPopup.offsetHeight > window.innerHeight - 12) top = rect.top - infoPopup.offsetHeight - 8;
+    infoPopup.style.left = left + 'px';
+    infoPopup.style.top = Math.max(12, top) + 'px';
+  }
+
+  document.addEventListener('click', function (event) {
+    if (activeInfo && event.target !== activeInfo) hideInfo();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') hideInfo();
+  });
+  list.addEventListener('scroll', hideInfo);
+  window.addEventListener('resize', hideInfo);
+
+  function formatSince(value) {
+    var since = value && new Date(value);
+    if (!since || isNaN(since.getTime())) return '';
+    var minutes = Math.max(0, Math.floor((Date.now() - since.getTime()) / 60000));
+    if (minutes >= 9 * 24 * 60) return 'Since 9+ days';
+    var days = Math.floor(minutes / 1440);
+    var hours = Math.floor(minutes % 1440 / 60);
+    return 'Since ' + (days ? days + 'd ' : '') + (hours ? hours + 'h ' : '') + minutes % 60 + 'm';
+  }
 
   function request(action, method) {
     return fetch('?action=' + action, { method: method || 'GET', cache: 'no-store' }).then(function (response) {
@@ -84,6 +151,7 @@
       });
     });
     try { sessionStorage.setItem('chargerSnapshot', JSON.stringify(data)); } catch (ignore) {}
+    hideInfo();
     list.replaceChildren();
     markers.replaceChildren();
     document.getElementById('count').textContent = String(chargers.length);
@@ -92,22 +160,34 @@
     chargers.forEach(function (charger, index) {
       var id = String(charger.qr_code || index);
       var status = statusOf(charger);
-      var card = document.createElement('button');
-      card.type = 'button'; card.className = 'charger'; card.setAttribute('data-charger', id);
+      var card = document.createElement('div');
+      card.className = 'charger'; card.setAttribute('data-charger', id);
       var dot = document.createElement('i'); dot.className = 'dot ' + status; dot.setAttribute('aria-hidden', 'true');
-      var main = document.createElement('span'); main.className = 'charger-main';
-      var title = document.createElement('strong'); title.textContent = charger.name || 'Charge point';
-      var description = document.createElement('small');
-      description.textContent = (charger.description || id) + ' · ' + id;
-      var stamp = charger.evses && charger.evses[0] && charger.evses[0].retrievedAt;
-      if (stamp && Date.parse(stamp) !== latestUpdate) description.textContent += ' · Updated ' + new Date(stamp).toLocaleString();
-      if (charger.error) description.textContent += ' · Refresh error: ' + charger.error;
-      main.appendChild(title); main.appendChild(description);
+      var main = document.createElement('div'); main.className = 'charger-main';
+      var title = document.createElement('div'); title.className = 'charger-title';
+      var name = document.createElement('button');
+      name.type = 'button'; name.className = 'charger-name';
+      name.textContent = charger.name || 'Charge point';
+      var info = document.createElement('button');
+      info.type = 'button'; info.className = 'charger-info'; info.textContent = 'i';
+      info.setAttribute('aria-label', 'Details for ' + name.textContent);
+      info.setAttribute('aria-expanded', 'false');
+      info.setAttribute('aria-controls', infoPopup.id);
+      info.onmouseenter = function () { if (!pinnedInfo) showInfo(info, charger, id); };
+      info.onmouseleave = function () { if (!pinnedInfo) hideInfo(); };
+      info.onfocus = function () { if (!pinnedInfo) showInfo(info, charger, id); };
+      info.onblur = function () { if (!pinnedInfo) hideInfo(); };
+      info.onclick = function (event) {
+        event.stopPropagation();
+        if (pinnedInfo && activeInfo === info) hideInfo();
+        else { showInfo(info, charger, id); pinnedInfo = true; }
+      };
+      title.appendChild(name); title.appendChild(info); main.appendChild(title);
       var since = charger.evses && charger.evses[0] && charger.evses[0].since;
-      var sinceDate = since && new Date(since);
-      if (status !== 'unknown' && sinceDate && !isNaN(sinceDate.getTime())) {
+      var sinceText = status !== 'unknown' && formatSince(since);
+      if (sinceText) {
         var sinceLine = document.createElement('small');
-        sinceLine.textContent = status.charAt(0).toUpperCase() + status.slice(1) + ' since ' + sinceDate.toLocaleString();
+        sinceLine.textContent = sinceText;
         main.appendChild(sinceLine);
       }
       var label = document.createElement('span'); label.className = 'status ' + status;
