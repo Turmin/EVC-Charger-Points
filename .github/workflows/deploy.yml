@@ -41,6 +41,7 @@ jobs:
             --include='.htaccess' \
             --include='sw.js' \
             --include='manifest.json' \
+            --include='config.json' \
             --include='css/***' \
             --include='js/***' \
             --include='icons/***' \

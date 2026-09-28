@@ -4,13 +4,9 @@ const API_BASE = 'https://evc-api.turmin.com';
 
 function demoData(): array {
     $items = [
-        ['18B03383', 'Main entrance', 'Charger by the main entrance', 'AVAILABLE'],
-        ['18B03351', 'Guest parking A', 'Guest charger by the main entrance', 'CHARGING'],
-        ['18B02944', 'Guest parking B', 'Guest charger by the main entrance', 'FAULTED'],
-        ['1', 'Guest parking C', 'Guest charger by the main entrance', 'CHARGING'],
-        ['2', 'Guest parking D', 'Guest charger by the main entrance', 'CHARGING'],
-        ['3', 'Guest parking E', 'Guest charger by the main entrance', 'CHARGING'],
-        ['4', 'Guest parking F', 'Guest charger by the main entrance', 'CHARGING']
+        ['12345678', 'Parking A', 'Charger by the main entrance', 'AVAILABLE'],
+        ['12345678', 'Parking B', 'Charger by the main entrance', 'CHARGING'],
+        ['12345678', 'Parking C', 'Charger by the main entrance', 'FAULTED'],
     ];
     $chargers = [];
     foreach ($items as $item) {
