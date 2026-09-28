@@ -17,7 +17,7 @@
       });
     }).catch(function (error) { toast(error.message, true); });
   }
-  var state = { selected: null, limit: null, busy: false, cooldownUntil: 0 };
+  var state = { selected: null, limit: null, busy: false, cooldownUntil: 0, statusSnapshot: null };
   var list = document.getElementById('charger-list');
   var markers = document.getElementById('markers');
   var refresh = document.getElementById('refresh');
@@ -47,7 +47,7 @@
     var stamp = evse && evse.retrievedAt && new Date(evse.retrievedAt);
     infoPopup.replaceChildren();
     [
-      'Description: ' + (charger.description || '—') + ' · ' + id,
+      (charger.description || '—') + ' · ' + id,
       'Updated: ' + (stamp && !isNaN(stamp.getTime()) ? stamp.toLocaleString() : 'Unavailable')
     ].forEach(function (line) {
       var item = document.createElement('div');
@@ -115,9 +115,9 @@
     return 'unknown';
   }
 
-  function toast(message, isError) {
+  function toast(message, isError, persistent) {
     var node = document.createElement('div');
-    node.className = 'toast' + (isError ? ' error' : '');
+    node.className = 'toast' + (isError ? ' error' : '') + (persistent ? ' persistent' : '');
     node.setAttribute('role', isError ? 'alert' : 'status');
     node.textContent = message;
     var close = document.createElement('button');
@@ -127,7 +127,7 @@
     close.onclick = function () { node.remove(); };
     node.appendChild(close);
     document.getElementById('toasts').appendChild(node);
-    setTimeout(function () { node.remove(); }, 10000);
+    if (!persistent) setTimeout(function () { node.remove(); }, 10000);
   }
 
   function select(id) {
@@ -141,7 +141,7 @@
     if (card) card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
-  function render(data) {
+  function render(data, fromCache) {
     var chargers = Array.isArray(data.chargers) ? data.chargers : [];
     var latestUpdate = 0;
     chargers.forEach(function (charger) {
@@ -150,12 +150,23 @@
         if (!isNaN(time)) latestUpdate = Math.max(latestUpdate, time);
       });
     });
+    if (!fromCache && !data.demo) {
+      var nextStatuses = {};
+      chargers.forEach(function (charger, index) {
+        var id = String(charger.qr_code || index);
+        var status = statusOf(charger);
+        nextStatuses[id] = status;
+        if (state.statusSnapshot && state.statusSnapshot[id] && state.statusSnapshot[id] !== status) {
+          toast((charger.name || 'Charge point') + ': ' + state.statusSnapshot[id] + ' → ' + status, false, true);
+        }
+      });
+      state.statusSnapshot = nextStatuses;
+    }
     try { sessionStorage.setItem('chargerSnapshot', JSON.stringify(data)); } catch (ignore) {}
     hideInfo();
     list.replaceChildren();
     markers.replaceChildren();
     document.getElementById('count').textContent = String(chargers.length);
-    document.getElementById('source-badge').textContent = data.demo ? 'Demo data' : 'API status';
     document.getElementById('demo-note').hidden = !data.demo;
     chargers.forEach(function (charger, index) {
       var id = String(charger.qr_code || index);
@@ -265,7 +276,7 @@
   loadConfig().then(function () {
     try {
       var cached = sessionStorage.getItem('chargerSnapshot');
-      if (cached) render(JSON.parse(cached));
+      if (cached) render(JSON.parse(cached), true);
     } catch (ignore) {}
     request('chargers').then(render, function (error) {
       list.textContent = 'Could not load chargers.';
