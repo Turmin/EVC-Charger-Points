@@ -28,7 +28,6 @@ button { font: inherit; cursor: pointer; }
   justify-content: space-between;
   gap: 10px;
   padding: 12px 0;
-  border-bottom: 1px solid var(--border);
 }
 .brand { display: flex; align-items: center; gap: 9px; font-size: 16px; white-space: nowrap; }
 .brand-icon {
@@ -96,6 +95,7 @@ h1, h2 { margin: 0; font-size: 16px; line-height: 1.2; }
 }
 .map-scroll { overflow: hidden; background: #e9ece7; }
 .map { position: relative; width: 100%; line-height: 0; }
+.map picture { display: block; }
 .map img { display: block; width: 100%; height: auto; }
 .marker {
   position: absolute;
@@ -131,6 +131,7 @@ h1, h2 { margin: 0; font-size: 16px; line-height: 1.2; }
   text-align: left;
   cursor: pointer;
 }
+.charger:first-child { border-top-color: transparent; }
 .charger:hover, .charger.selected { background: rgba(72, 148, 95, .1); }
 .dot { display: inline-block; flex: none; width: 10px; height: 10px; margin-top: 4px; border-radius: 50%; }
 .charger-main { min-width: 0; flex: 1; }

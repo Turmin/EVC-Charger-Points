@@ -246,13 +246,20 @@
   };
 
   var theme = document.getElementById('theme-toggle');
+  var themeColor = document.querySelector('meta[name="theme-color"]');
+  var statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+  function applyTheme(value) {
+    document.documentElement.setAttribute('data-theme', value);
+    if (themeColor) themeColor.content = value === 'dark' ? '#101914' : '#f5f7f5';
+    if (statusBar) statusBar.content = value === 'dark' ? 'black' : 'default';
+  }
   try {
     var saved = localStorage.getItem('theme');
-    if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+    if (saved === 'dark' || saved === 'light') applyTheme(saved);
   } catch (ignore) {}
   theme.onclick = function () {
     var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
+    applyTheme(next);
     try { localStorage.setItem('theme', next); } catch (ignore) {}
   };
   loadConfig().then(function () {
