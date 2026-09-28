@@ -42,7 +42,7 @@
   function statusOf(charger) {
     var values = (charger.evses || []).map(function (evse) { return evse.status || ''; });
     if (!values.length) return 'unknown';
-    if (values.some(function (value) { return /FAULT|ERROR|OUT_OF_ORDER/i.test(value); })) return 'fault';
+    if (values.some(function (value) { return /FAULT|ERROR|OUT_?OF_?ORDER/i.test(value); })) return 'fault';
     if (values.some(function (value) { return /CHARG|OCCUP|IN_USE|RESERV/i.test(value); })) return 'occupied';
     if (values.every(function (value) { return value === 'AVAILABLE'; })) return 'available';
     return 'unknown';
@@ -76,6 +76,13 @@
 
   function render(data) {
     var chargers = Array.isArray(data.chargers) ? data.chargers : [];
+    var latestUpdate = 0;
+    chargers.forEach(function (charger) {
+      (charger.evses || []).forEach(function (evse) {
+        var time = Date.parse(evse.retrievedAt);
+        if (!isNaN(time)) latestUpdate = Math.max(latestUpdate, time);
+      });
+    });
     try { sessionStorage.setItem('chargerSnapshot', JSON.stringify(data)); } catch (ignore) {}
     list.replaceChildren();
     markers.replaceChildren();
@@ -93,9 +100,16 @@
       var description = document.createElement('small');
       description.textContent = (charger.description || id) + ' · ' + id;
       var stamp = charger.evses && charger.evses[0] && charger.evses[0].retrievedAt;
-      if (stamp) description.textContent += ' · Updated ' + new Date(stamp).toLocaleString();
+      if (stamp && Date.parse(stamp) !== latestUpdate) description.textContent += ' · Updated ' + new Date(stamp).toLocaleString();
       if (charger.error) description.textContent += ' · Refresh error: ' + charger.error;
       main.appendChild(title); main.appendChild(description);
+      var since = charger.evses && charger.evses[0] && charger.evses[0].since;
+      var sinceDate = since && new Date(since);
+      if (status !== 'unknown' && sinceDate && !isNaN(sinceDate.getTime())) {
+        var sinceLine = document.createElement('small');
+        sinceLine.textContent = status.charAt(0).toUpperCase() + status.slice(1) + ' since ' + sinceDate.toLocaleString();
+        main.appendChild(sinceLine);
+      }
       var label = document.createElement('span'); label.className = 'status ' + status;
       label.textContent = status.charAt(0).toUpperCase() + status.slice(1);
       card.appendChild(dot); card.appendChild(main); card.appendChild(label);
@@ -113,7 +127,7 @@
       }
     });
     if (state.selected) select(state.selected);
-    updated.textContent = data.demo ? 'Demo overview' : 'Updated ' + new Date().toLocaleTimeString();
+    updated.textContent = data.demo ? 'Demo overview' : 'Updated ' + new Date(latestUpdate || Date.now()).toLocaleString();
   }
 
   function applyLimit(limit) {

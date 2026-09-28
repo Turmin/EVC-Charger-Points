@@ -66,7 +66,6 @@ button { font: inherit; cursor: pointer; }
 .primary:disabled { opacity: .55; cursor: not-allowed; }
 .spinning { display: inline-block; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.dashboard-status { min-height: 32px; padding: 9px 2px 7px; font-size: 11px; }
 .muted, footer, .demo-note { color: var(--muted); }
 .dashboard { display: grid; gap: 12px; }
 .map-card, .sidebar {
@@ -85,6 +84,7 @@ button { font: inherit; cursor: pointer; }
   padding: 13px 15px;
 }
 h1, h2 { margin: 0; font-size: 16px; line-height: 1.2; }
+.sidebar .card-heading small { display: block; margin-top: 4px; font-size: 11px; }
 .badge, .count {
   flex: none;
   padding: 6px 10px;
@@ -203,7 +203,6 @@ footer { padding: 22px 2px; font-size: 11px; }
 @media (min-width: 600px) {
   .shell { padding: 0 24px; }
   .topbar { min-height: 72px; }
-  .dashboard-status { min-height: 38px; padding-top: 12px; }
   .dashboard { gap: 18px; }
   .map-card { align-self: start; }
   .map-scroll { aspect-ratio: 1510 / 849; }

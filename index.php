@@ -104,10 +104,9 @@ if (isset($_GET['action'])) {
 <div class="shell">
 <header class="topbar"><div class="brand"><span class="brand-icon" aria-hidden="true">⚡</span><strong>Charge Point Map</strong></div><div class="actions"><button id="theme-toggle" class="icon-button" type="button" aria-label="Switch theme">◐</button><button id="refresh" class="primary" type="button" disabled>↻ Live refresh</button></div></header>
 <main>
-<div class="dashboard-status"><span id="updated" class="muted">Loading chargers…</span></div>
 <section class="dashboard" aria-label="Charger overview">
 <div class="map-card"><div class="card-heading"><h1>Site map</h1><span id="source-badge" class="badge">Loading</span></div><div class="map-scroll"><div class="map"><img src="static/img/map.png" alt="Site parking layout" width="1774" height="887"><div id="markers"></div></div></div></div>
-<aside class="sidebar"><div class="card-heading"><h2>Charge points</h2><span id="count" class="count">–</span></div><div id="charger-list" class="charger-list" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div><div class="legend"><span><i class="dot available"></i>Available</span><span><i class="dot occupied"></i>Occupied</span><span><i class="dot fault"></i>Fault</span><span><i class="dot unknown"></i>Unknown</span></div></aside>
+<aside class="sidebar"><div class="card-heading"><div><h2>Charge points</h2><small id="updated" class="muted">Loading chargers…</small></div><span id="count" class="count">–</span></div><div id="charger-list" class="charger-list" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div><div class="legend"><span><i class="dot available"></i>Available</span><span><i class="dot occupied"></i>Occupied</span><span><i class="dot fault"></i>Fault</span><span><i class="dot unknown"></i>Unknown</span></div></aside>
 </section><p id="demo-note" class="demo-note" hidden>Demo data is shown while the charger API is unavailable.</p>
 </main><footer>Charge Point Map · Status may be delayed. Check the charger before parking.</footer></div><div id="toasts" class="toasts" aria-live="polite"></div>
 </body></html>
