@@ -21,6 +21,7 @@
 body { margin: 0; background: inherit; color: var(--text); }
 button { font: inherit; cursor: pointer; }
 .shell { max-width: 1500px; margin: auto; padding: 0 12px; }
+@media (display-mode: standalone) { .shell { padding-top: env(safe-area-inset-top); } }
 .topbar {
   display: flex;
   flex-wrap: wrap;
