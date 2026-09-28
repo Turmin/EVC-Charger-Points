@@ -37,6 +37,7 @@ jobs:
             --include='*.html' \
             --include='*.ico' \
             --include='*.png' \
+            --include='*.webp' \
             --include='robots.txt' \
             --include='.htaccess' \
             --include='sw.js' \
