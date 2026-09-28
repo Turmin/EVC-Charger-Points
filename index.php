@@ -63,16 +63,16 @@ header('Cache-Control: no-cache, must-revalidate');
 <meta name="theme-color" content="#f5f7f5">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Kaak Charger Status</title>
-<link rel="icon" type="image/x-icon" href="static/img/icons/favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="static/img/icons/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="static/img/icons/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="static/img/icons/apple-touch-icon.png">
-<link rel="manifest" href="static/img/icons/site.webmanifest">
+<link rel="icon" type="image/x-icon" href="static/img/icons/favicon.ico?v=20260928b">
+<link rel="icon" type="image/png" sizes="32x32" href="static/img/icons/favicon-32x32.png?v=20260928b">
+<link rel="icon" type="image/png" sizes="16x16" href="static/img/icons/favicon-16x16.png?v=20260928b">
+<link rel="apple-touch-icon" sizes="180x180" href="static/img/icons/apple-touch-icon.png?v=20260928b">
+<link rel="manifest" href="static/img/icons/site.webmanifest?v=20260928b">
 <link rel="stylesheet" href="static/css/app.css?v=<?=filemtime(__DIR__ . '/static/css/app.css')?>"><script src="static/js/app.js?v=<?=filemtime(__DIR__ . '/static/js/app.js')?>" defer></script>
 </head>
 <body>
 <div class="shell">
-<header class="topbar"><div class="brand"><span class="brand-icon" aria-hidden="true">⚡</span><strong>Kaak Charger Status</strong></div><div class="actions"><button id="theme-toggle" class="icon-button" type="button" aria-label="Switch theme">◐</button><button id="refresh" class="primary" type="button" disabled>↻ Live refresh</button></div></header>
+<header class="topbar"><div class="brand"><img src="static/img/icons/android-chrome-192x192.png?v=<?=filemtime(__DIR__ . '/static/img/icons/android-chrome-192x192.png')?>" alt="" class="brand-icon" width="36" height="36"><strong>Kaak Charger Status</strong></div><div class="actions"><button id="theme-toggle" class="icon-button" type="button" aria-label="Switch theme">◐</button><button id="refresh" class="primary" type="button" disabled>↻ Live refresh</button></div></header>
 <main>
 <section class="dashboard" aria-label="Charger overview">
 <div class="map-card"><div class="map-scroll"><div class="map"><picture><source srcset="static/img/map.webp" type="image/webp"><img src="static/img/map.png" alt="Site parking layout" width="1774" height="887" fetchpriority="high"></picture><div id="markers"></div></div></div></div>
