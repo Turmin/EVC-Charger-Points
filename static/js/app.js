@@ -42,7 +42,7 @@
   function statusOf(charger) {
     var values = (charger.evses || []).map(function (evse) { return evse.status || ''; });
     if (!values.length) return 'unknown';
-    if (values.some(function (value) { return /FAULT|ERROR|OUT_?OF_?ORDER/i.test(value); })) return 'fault';
+    if (values.some(function (value) { return /FAULT|ERROR/i.test(value); })) return 'fault';
     if (values.some(function (value) { return /CHARG|OCCUP|IN_USE|RESERV/i.test(value); })) return 'occupied';
     if (values.every(function (value) { return value === 'AVAILABLE'; })) return 'available';
     return 'unknown';
