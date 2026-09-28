@@ -3,10 +3,10 @@
 Run locally from this directory:
 
 ```powershell
-& "C:\Web\php-7.4.33-Win32-vc15-x64\php.exe" -S localhost:8000
+& "C:\Web\php-7.4.33-Win32-vc15-x64\php.exe" -d extension_dir="C:\Web\php-7.4.33-Win32-vc15-x64\ext" -d extension=php_openssl.dll -S localhost:8000
 ```
 
-Open http://localhost:8000.
+Open http://localhost:8000. The OpenSSL setting enables HTTPS requests to the charger API with the bundled PHP installation. If the API is unreachable, the page shows labeled demo data.
 
 ## Marker positions
 

@@ -205,12 +205,16 @@ footer { padding: 22px 2px; font-size: 11px; }
   .topbar { min-height: 72px; }
   .dashboard-status { min-height: 38px; padding-top: 12px; }
   .dashboard { gap: 18px; }
+  .map-card { align-self: start; }
+  .map-scroll { aspect-ratio: 1510 / 849; }
+  .map { width: 117.48%; }
   .card-heading { padding: 18px 20px; }
   .marker { width: 25px; height: 25px; border-width: 3px; }
 }
 @media (min-width: 950px) {
   .dashboard { grid-template-columns: minmax(0, 1fr) 340px; }
-  .charger-list { max-height: 600px; overflow: auto; }
+  .sidebar { display: flex; flex-direction: column; height: 0; min-height: 100%; }
+  .charger-list { flex: 1; min-height: 0; overflow: auto; }
 }
 @media (max-width: 599px) {
   .map { width: 114%; }
