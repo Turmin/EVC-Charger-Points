@@ -19,7 +19,7 @@ function demoData(): array {
 function apiRequest(string $path, bool $post): array {
     $context = stream_context_create(['http' => [
         'method' => $post ? 'POST' : 'GET', 'header' => "Accept: application/json\r\n",
-        'timeout' => 5, 'ignore_errors' => true
+        'timeout' => $post ? 30 : 5, 'ignore_errors' => true
     ]]);
     $body = @file_get_contents(API_BASE . $path, false, $context);
     $status = 0;
