@@ -62,7 +62,7 @@ header('Cache-Control: no-cache, must-revalidate');
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f5f7f5">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Charge Point Map</title>
+<title>Kaak Charger Status</title>
 <link rel="icon" type="image/x-icon" href="static/img/icons/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="static/img/icons/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="static/img/icons/favicon-16x16.png">
@@ -72,11 +72,11 @@ header('Cache-Control: no-cache, must-revalidate');
 </head>
 <body>
 <div class="shell">
-<header class="topbar"><div class="brand"><span class="brand-icon" aria-hidden="true">⚡</span><strong>Charge Point Map</strong></div><div class="actions"><button id="theme-toggle" class="icon-button" type="button" aria-label="Switch theme">◐</button><button id="refresh" class="primary" type="button" disabled>↻ Live refresh</button></div></header>
+<header class="topbar"><div class="brand"><span class="brand-icon" aria-hidden="true">⚡</span><strong>Kaak Charger Status</strong></div><div class="actions"><button id="theme-toggle" class="icon-button" type="button" aria-label="Switch theme">◐</button><button id="refresh" class="primary" type="button" disabled>↻ Live refresh</button></div></header>
 <main>
 <section class="dashboard" aria-label="Charger overview">
 <div class="map-card"><div class="card-heading"><h1>Site map</h1><span id="source-badge" class="badge">Loading</span></div><div class="map-scroll"><div class="map"><picture><source srcset="static/img/map.webp" type="image/webp"><img src="static/img/map.png" alt="Site parking layout" width="1774" height="887" fetchpriority="high"></picture><div id="markers"></div></div></div></div>
 <aside class="sidebar"><div class="card-heading"><div><h2>Charge points</h2><small id="updated" class="muted">Loading chargers…</small></div><span id="count" class="count">–</span></div><div id="charger-list" class="charger-list" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div><div class="legend"><span><i class="dot available"></i>Available</span><span><i class="dot occupied"></i>Occupied</span><span><i class="dot fault"></i>Fault</span><span><i class="dot unknown"></i>Unknown</span></div></aside>
 </section><p id="demo-note" class="demo-note" hidden>Demo data is shown while the charger API is unavailable.</p>
-</main><footer>Charge Point Map · Status may be delayed. Check the charger before parking.</footer></div><div id="toasts" class="toasts" aria-live="polite"></div>
+</main><footer>Kaak Charger Status · Status may be delayed. Check the charger before parking.</footer></div><div id="toasts" class="toasts" aria-live="polite"></div>
 </body></html>

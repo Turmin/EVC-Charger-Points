@@ -1,4 +1,4 @@
-# Charge Point Map
+# Kaak Charger Status
 
 Run locally from this directory:
 
