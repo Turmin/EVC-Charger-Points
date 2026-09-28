@@ -61,6 +61,7 @@ header('Cache-Control: no-cache, must-revalidate');
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#f5f7f5">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Kaak Charger Status</title>
 <link rel="icon" type="image/x-icon" href="static/img/icons/favicon.ico?v=20260928b">
