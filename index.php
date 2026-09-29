@@ -2,20 +2,6 @@
 declare(strict_types=1);
 const API_BASE = 'https://evc-api.turmin.com';
 
-function demoData(): array {
-    $items = [
-        ['12345678', 'Parking A', 'Charger by the main entrance', 'AVAILABLE'],
-        ['12345678', 'Parking B', 'Charger by the main entrance', 'CHARGING'],
-        ['12345678', 'Parking C', 'Charger by the main entrance', 'FAULTED']
-    ];
-    $chargers = [];
-    foreach ($items as $item) {
-        $chargers[] = ['qr_code' => $item[0], 'name' => $item[1], 'description' => $item[2],
-            'evses' => [['status' => $item[3], 'retrievedAt' => null, 'since' => null]], 'error' => null];
-    }
-    return ['chargers' => $chargers, 'demo' => true];
-}
-
 function apiRequest(string $path, bool $post): array {
     $context = stream_context_create(['http' => [
         'method' => $post ? 'POST' : 'GET', 'header' => "Accept: application/json\r\n",
@@ -42,10 +28,6 @@ if (isset($_GET['action'])) {
         exit;
     }
     [$status, $data] = apiRequest($action === 'chargers' ? '/chargers' : '/chargers/live', $action === 'refresh');
-    if ($action === 'chargers' && (!$data || $status < 200 || $status >= 300)) {
-        echo json_encode(demoData());
-        exit;
-    }
     if (!$data) {
         http_response_code(503);
         echo json_encode(['detail' => ['code' => 'api_unavailable', 'message' => 'The charger API is currently unavailable.']]);
@@ -78,6 +60,6 @@ header('Cache-Control: no-cache, must-revalidate');
 <section class="dashboard" aria-label="Charger overview">
 <div class="map-card"><div class="map-scroll"><div class="map"><picture><source srcset="static/img/map.webp" type="image/webp"><img src="static/img/map.png" alt="Site parking layout" width="1774" height="887" fetchpriority="high"></picture><div id="markers"></div></div></div></div>
 <aside class="sidebar"><div class="card-heading"><div><h2>Charge points</h2><small id="updated" class="muted">Loading chargers…</small></div><span id="count" class="count">–</span></div><div id="charger-list" class="charger-list" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div><div class="legend"><span><i class="dot available"></i>Available</span><span><i class="dot occupied"></i>Occupied</span><span><i class="dot fault"></i>Fault</span><span><i class="dot unknown"></i>Unknown</span></div></aside>
-</section><p id="demo-note" class="demo-note" hidden>Demo data is shown while the charger API is unavailable.</p>
-</main><footer>Kaak Charger Status · Status may be delayed. Check the charger before parking.</footer></div><div id="toasts" class="toasts" aria-live="polite"></div>
+</section>
+</main><footer>Charger data and refresh limits are checked every 60 seconds. Status may be delayed. Check the charger before parking.</footer></div><div id="toasts" class="toasts" aria-live="polite"></div>
 </body></html>
