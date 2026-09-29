@@ -173,10 +173,18 @@
     hideInfo();
     list.replaceChildren();
     markers.replaceChildren();
-    document.getElementById('count').textContent = String(chargers.length);
-    chargers.forEach(function (charger, index) {
-      var id = String(charger.qr_code || index);
-      var status = statusOf(charger);
+    var statusOrder = { available: 0, occupied: 1, fault: 2, unknown: 3 };
+    var displayChargers = chargers.map(function (charger, index) {
+      return { charger: charger, index: index, status: statusOf(charger) };
+    }).sort(function (a, b) {
+      return statusOrder[a.status] - statusOrder[b.status] || a.index - b.index;
+    });
+    document.getElementById('count-available').textContent = String(displayChargers.filter(function (item) { return item.status === 'available'; }).length);
+    document.getElementById('count-total').textContent = String(chargers.length);
+    displayChargers.forEach(function (item) {
+      var charger = item.charger;
+      var id = String(charger.qr_code || item.index);
+      var status = item.status;
       var card = document.createElement('div');
       card.className = 'charger'; card.setAttribute('data-charger', id);
       var dot = document.createElement('i'); dot.className = 'dot ' + status; dot.setAttribute('aria-hidden', 'true');

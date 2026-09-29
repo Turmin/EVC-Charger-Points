@@ -110,16 +110,11 @@ button { font: inherit; cursor: pointer; }
 }
 h1, h2 { margin: 0; font-size: 17px; line-height: 1.25; letter-spacing: -.025em; }
 .sidebar .card-heading small { display: block; margin-top: 6px; font-size: 12px; }
-.count {
-  flex: none;
-  padding: 6px 10px;
-  border-radius: 30px;
-  background: #e8efff;
-  color: #2c55af;
-  font-size: 11px;
-  font-weight: 700;
-}
-:root[data-theme=dark] .count { background: #263b65; color: #c4d5ff; }
+.count { flex: none; text-align: right; }
+.count-values { display: flex; justify-content: flex-end; align-items: baseline; gap: 5px; font-variant-numeric: tabular-nums; }
+.count-values strong { font-size: 19px; line-height: 1; }
+.count-values span { color: var(--muted); font-size: 15px; }
+.count small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.1; }
 .map-scroll { overflow: hidden; background: #e9ece7; }
 :root[data-theme=dark] .map-scroll { background: #252d3a; }
 .map { position: relative; width: 100%; line-height: 0; }
@@ -226,7 +221,7 @@ h1, h2 { margin: 0; font-size: 17px; line-height: 1.25; letter-spacing: -.025em;
 }
 @keyframes shimmer { to { background-position: -200% 0; } }
 .demo-note { margin: 12px 2px 0; font-size: 11px; }
-footer { padding: 22px 2px; font-size: 11px; }
+footer { padding: 10px 2px; font-size: 11px; }
 .toasts {
   position: fixed;
   right: 12px;
@@ -293,6 +288,14 @@ footer { padding: 22px 2px; font-size: 11px; }
   .charger-list { flex: 1; min-height: 0; overflow: auto; }
 }
 @media (max-width: 599px) {
+  .topbar { flex-wrap: nowrap; gap: 4px; padding: 12px 0 16px; }
+  .brand { min-width: 0; gap: 6px; font-size: 13px; }
+  .brand strong { overflow: hidden; text-overflow: ellipsis; }
+  .brand-icon { width: 30px; height: 30px; }
+  .actions { flex: none; gap: 5px; }
+  .icon-button { width: 34px; height: 34px; border-radius: 9px; font-size: 19px; }
+  .primary { min-height: 34px; max-width: 112px; padding: 7px 9px; border-radius: 9px; font-size: 11px; overflow: hidden; text-overflow: ellipsis; }
+  .card-heading { padding: 16px 12px 12px; }
   .map { width: 114%; }
   .marker {
     width: 12px;
@@ -322,5 +325,11 @@ footer { padding: 22px 2px; font-size: 11px; }
     outline: 2px solid #276cfa;
     outline-offset: 2px;
   }
+}
+@media (max-width: 360px) {
+  .brand { font-size: 12px; }
+  .brand-icon { width: 28px; height: 28px; }
+  .primary { max-width: 100px; padding: 7px 6px; font-size: 10px; }
+  .icon-button { width: 32px; height: 32px; }
 }
 .coordinate-mode .map, .coordinate-mode .marker { cursor: crosshair; }
