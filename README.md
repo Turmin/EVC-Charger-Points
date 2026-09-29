@@ -6,7 +6,7 @@ Run locally from this directory:
 & "C:\Web\php-7.4.33-Win32-vc15-x64\php.exe" -d extension_dir="C:\Web\php-7.4.33-Win32-vc15-x64\ext" -d extension=php_openssl.dll -S localhost:8000
 ```
 
-Open http://localhost:8000. The OpenSSL setting enables HTTPS requests to the charger API with the bundled PHP installation. If the API is unreachable, the page shows labeled demo data.
+Open http://localhost:8000. The OpenSSL setting enables HTTPS requests to the charger API with the bundled PHP installation.
 
 ## Marker positions
 
@@ -22,7 +22,7 @@ Edit `config.json` to position markers on `static/img/map.png`. Each key is a ch
 
 Add another entry for each new charger. Reload the page to see changes. Chargers without a configured position still appear in the list.
 
-While the page is open, it requests cached charger data and refresh limits every 60 seconds. Only the Live refresh button sends a POST request that consumes the API's limited live-refresh quota. When the API cannot be reached, the page labels and displays demo charger data.
+While the page is open, it requests cached charger data and refresh limits every 60 seconds. Failed GET requests are retried after 10 seconds. Only the Live refresh button sends a POST request that consumes the API's limited live-refresh quota.
 
 ## Coordinate helper
 

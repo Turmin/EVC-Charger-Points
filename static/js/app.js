@@ -119,7 +119,14 @@
     var node = document.createElement('div');
     node.className = 'toast' + (isError ? ' error' : '') + (persistent ? ' persistent' : '');
     node.setAttribute('role', isError ? 'alert' : 'status');
-    node.textContent = message;
+    var icon = document.createElement('span');
+    icon.className = 'toast-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = isError ? '!' : persistent ? '↗' : '✓';
+    node.appendChild(icon);
+    var label = document.createElement('span');
+    label.textContent = message;
+    node.appendChild(label);
     var close = document.createElement('button');
     close.type = 'button';
     close.setAttribute('aria-label', 'Close notification');
@@ -150,14 +157,14 @@
         if (!isNaN(time)) latestUpdate = Math.max(latestUpdate, time);
       });
     });
-    if (!fromCache && !data.demo) {
+    if (!fromCache) {
       var nextStatuses = {};
       chargers.forEach(function (charger, index) {
         var id = String(charger.qr_code || index);
         var status = statusOf(charger);
         nextStatuses[id] = status;
         if (state.statusSnapshot && state.statusSnapshot[id] && state.statusSnapshot[id] !== status) {
-          toast((charger.name || 'Charge point') + ': ' + state.statusSnapshot[id] + ' → ' + status, false, true);
+          toast((charger.name || id) + ': ' + state.statusSnapshot[id] + ' → ' + status, false, true);
         }
       });
       state.statusSnapshot = nextStatuses;
@@ -167,7 +174,6 @@
     list.replaceChildren();
     markers.replaceChildren();
     document.getElementById('count').textContent = String(chargers.length);
-    document.getElementById('demo-note').hidden = !data.demo;
     chargers.forEach(function (charger, index) {
       var id = String(charger.qr_code || index);
       var status = statusOf(charger);
@@ -218,7 +224,7 @@
       }
     });
     if (state.selected) select(state.selected);
-    updated.textContent = data.demo ? 'Demo overview' : 'Updated ' + new Date(latestUpdate || Date.now()).toLocaleString();
+    updated.textContent = 'Updated ' + new Date(latestUpdate || Date.now()).toLocaleString();
   }
 
   function applyLimit(limit) {
@@ -238,7 +244,26 @@
   }
 
   function loadLimit() {
-    return request('limit').then(applyLimit, function () { updateButton(); });
+    return request('limit').then(function (data) {
+      applyLimit(data);
+      setTimeout(loadLimit, 60000);
+    }, function () {
+      updateButton();
+      setTimeout(loadLimit, 10000);
+    });
+  }
+
+  function loadChargers() {
+    return request('chargers').then(function (data) {
+      render(data);
+      setTimeout(loadChargers, 60000);
+    }, function () {
+      if (!state.statusSnapshot) {
+        list.textContent = 'Could not load chargers. Retrying…';
+        updated.textContent = 'Waiting for charger data…';
+      }
+      setTimeout(loadChargers, 10000);
+    });
   }
 
   refresh.onclick = function () {
@@ -253,7 +278,7 @@
       if (error.limit) applyLimit(error.limit);
       if (error.retryAfter) state.cooldownUntil = Date.now() + Number(error.retryAfter) * 1000;
       toast(error.code + ': ' + error.message, true);
-    }).then(function () { state.busy = false; updateButton(); loadLimit(); });
+    }).then(function () { state.busy = false; updateButton(); });
   };
 
   var theme = document.getElementById('theme-toggle');
@@ -276,16 +301,15 @@
   loadConfig().then(function () {
     try {
       var cached = sessionStorage.getItem('chargerSnapshot');
-      if (cached) render(JSON.parse(cached), true);
+      if (cached) {
+        var snapshot = JSON.parse(cached);
+        if (!snapshot.demo) render(snapshot, true);
+      }
     } catch (ignore) {}
-    request('chargers').then(render, function (error) {
-      list.textContent = 'Could not load chargers.';
-      toast(error.message, true);
-    });
+    loadChargers();
   });
   loadLimit();
   setInterval(updateButton, 1000);
-  setInterval(function () { request('chargers').then(render, function () {}); loadLimit(); }, 60000);
   if (new URLSearchParams(window.location.search).get("coordinates") === "1") {
     var map = document.querySelector(".map");
     var image = map.querySelector("img");
