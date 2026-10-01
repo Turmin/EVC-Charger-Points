@@ -115,14 +115,16 @@
     return 'unknown';
   }
 
-  function toast(message, isError, persistent) {
+  function toast(message, isError, statusChange) {
+    var duration = statusChange ? 30 * 60 * 1000 : 10000;
     var node = document.createElement('div');
-    node.className = 'toast' + (isError ? ' error' : '') + (persistent ? ' persistent' : '');
+    node.className = 'toast' + (isError ? ' error' : '');
+    node.style.setProperty('--toast-duration', duration + 'ms');
     node.setAttribute('role', isError ? 'alert' : 'status');
     var icon = document.createElement('span');
     icon.className = 'toast-icon';
     icon.setAttribute('aria-hidden', 'true');
-    icon.textContent = isError ? '!' : persistent ? '↗' : '✓';
+    icon.textContent = isError ? '!' : statusChange ? '↗' : '✓';
     node.appendChild(icon);
     var label = document.createElement('span');
     label.textContent = message;
@@ -134,7 +136,7 @@
     close.onclick = function () { node.remove(); };
     node.appendChild(close);
     document.getElementById('toasts').appendChild(node);
-    if (!persistent) setTimeout(function () { node.remove(); }, 10000);
+    setTimeout(function () { node.remove(); }, duration);
   }
 
   function select(id) {
@@ -318,6 +320,27 @@
   });
   loadLimit();
   setInterval(updateButton, 1000);
+  /* Toast preview: uncomment this block to enable ?toast-test=1.
+  if (new URLSearchParams(window.location.search).get('toast-test') === '1') {
+    var toastTest = document.createElement('button');
+    var toastTestIndex = 0;
+    toastTest.type = 'button';
+    toastTest.className = 'primary';
+    toastTest.textContent = 'Test toast';
+    toastTest.onclick = function () {
+      var example = toastTestIndex++ % 3;
+      if (example === 0) {
+        toast('Charger statuses refreshed.', false);
+      } else if (example === 1) {
+        toast('Example error: charger statuses could not be refreshed.', true);
+      } else {
+        var chargerName = list.querySelector('.charger-name');
+        toast((chargerName ? chargerName.textContent : 'Example charger') + ': available → occupied', false, true);
+      }
+    };
+    document.querySelector('footer').appendChild(toastTest);
+  }
+  */
   if (new URLSearchParams(window.location.search).get("coordinates") === "1") {
     var map = document.querySelector(".map");
     var image = map.querySelector("img");

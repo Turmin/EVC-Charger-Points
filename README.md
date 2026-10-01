@@ -27,3 +27,9 @@ While the page is open, it requests cached charger data and refresh limits every
 ## Coordinate helper
 
 Open http://localhost:8000/?coordinates=1 and open your browser's developer console (usually F12). Click a parking space on the map. The console prints a ready-to-copy `{"x": ..., "y": ...}` value for `config.json`. It also works on the cropped mobile map because it measures the displayed image. Open the normal URL to turn the helper off.
+
+## Toast preview
+
+The preview is currently commented out in `static/js/app.js`. Uncomment the marked Toast preview block to enable it again.
+
+Open http://localhost:8000/?toast-test=1 to show a Test toast button in the footer. Each click cycles through a success notification, an error notification, and a charger status change. Success and error notifications expire after 10 seconds; status changes expire after 30 minutes with a countdown bar. These examples only display notifications. Open the normal URL to hide the button.

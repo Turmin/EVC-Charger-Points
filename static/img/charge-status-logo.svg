@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" role="img" aria-labelledby="title desc">
+  <title id="title">Charge Status</title>
+  <desc id="desc">EV charging status dashboard logo with four status indicators.</desc>
+
+  <defs>
+    <linearGradient id="chargerBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#16C7EA"/>
+      <stop offset="100%" stop-color="#157CF3"/>
+    </linearGradient>
+    <linearGradient id="boltGreen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#79F32A"/>
+      <stop offset="100%" stop-color="#00D96B"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Charger -->
+  <rect x="48" y="34" width="168" height="196" rx="34" fill="url(#chargerBlue)"/>
+  <rect x="62" y="48" width="140" height="168" rx="25" fill="#0B2743"/>
+  <rect x="33" y="222" width="198" height="25" rx="13" fill="#0B2743"/>
+
+  <!-- Lightning bolt -->
+  <path d="M146 72 L93 143 H126 L111 195 L176 123 H143 Z"
+        fill="url(#boltGreen)" stroke-linejoin="round"/>
+
+  <!-- Cable -->
+  <path d="M216 122 C275 127 286 173 286 205 C286 236 269 256 247 256 C225 256 213 239 213 219"
+        fill="none" stroke="#0B2743" stroke-width="17" stroke-linecap="round"/>
+  <path d="M245 111 L285 132 L302 171 L282 181 L264 146 L234 129 Z"
+        fill="#0B2743"/>
+  <path d="M253 121 L278 136 L290 163"
+        fill="none" stroke="#30B66A" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Status indicators -->
+  <circle cx="88"  cy="198" r="9" fill="#30B66A"/>
+  <circle cx="118" cy="198" r="9" fill="#F3A734"/>
+  <circle cx="148" cy="198" r="9" fill="#E85858"/>
+  <circle cx="178" cy="198" r="9" fill="#89958D"/>
+
+  <!-- Wordmark -->
+  <text x="336" y="154"
+        font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="74" font-weight="750" letter-spacing="-2"
+        fill="#0B2743">Charge</text>
+  <text x="336" y="220"
+        font-family="Inter, Segoe UI, Arial, sans-serif"
+        font-size="62" font-weight="700" letter-spacing="-1"
+        fill="#30B66A">Status</text>
+
+  <!-- Small status key -->
+  <g font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" fill="#65727D">
+    <circle cx="557" cy="247" r="6" fill="#30B66A"/><text x="570" y="253">Available</text>
+    <circle cx="655" cy="247" r="6" fill="#F3A734"/><text x="668" y="253">Occupied</text>
+    <circle cx="762" cy="247" r="6" fill="#E85858"/><text x="775" y="253">Fault</text>
+    <circle cx="839" cy="247" r="6" fill="#89958D"/><text x="852" y="253">Unknown</text>
+  </g>
+</svg>

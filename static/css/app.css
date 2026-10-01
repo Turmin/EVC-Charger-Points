@@ -265,10 +265,9 @@ footer { padding: 10px 2px; font-size: 11px; }
   height: 3px;
   transform-origin: left;
   background: #268e55;
-  animation: toast-timer 10s linear forwards;
+  animation: toast-timer var(--toast-duration, 10s) linear forwards;
 }
 .toast.error:after { background: #d84848; }
-.toast.persistent:after { display: none; }
 @keyframes toast-timer { to { transform: scaleX(0); } }
 @media (prefers-reduced-motion: reduce) { .toast, .toast-icon, .toast:after { animation: none; } }
 @media (max-width: 599px) { .toasts { left: 12px; right: 12px; width: auto; } .toast { padding: 16px 46px 20px 58px; font-size: 14px; } .toast-icon { top: 14px; left: 16px; width: 28px; height: 28px; font-size: 18px; } }
